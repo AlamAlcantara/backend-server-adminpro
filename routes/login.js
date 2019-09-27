@@ -1,15 +1,16 @@
 let express = require('express');
 let bcrypt = require('bcryptjs');
 let jwt = require('jsonwebtoken');
+let SEED = require('../config/config').SEED;
+let Usuario = require('../models/usuario');
 
 let app = express();
 
-let Usuario = require('../models/usuario');
- //rutas
+//rutas
 
- //===========================================
-// Obtener todos los usuarios
-//==========================================
+//===========================================
+// Autenticacion
+//===========================================
 
 app.post('/',(req,res)=>{
 
@@ -33,10 +34,10 @@ app.post('/',(req,res)=>{
                 mensaje:'Credenciales incorrectas - contraseña'
             });
         }else{
-
+ 
             //crear token
             usuarioEncontrado.password = ';)';
-            let token = jwt.sign({usuario: usuarioEncontrado},'@este-es@un-seed@dificil-de-decifrat',{expiresIn:14400}) //4 horas para expirar
+            let token = jwt.sign({usuario: usuarioEncontrado},SEED,{expiresIn:14400}) //4 horas para expirar
 
             return res.status(200).json({
                 ok:true,
