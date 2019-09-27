@@ -16,6 +16,8 @@ app.use(bodyParser.json())
 let appRoutes = require('./routes/app');
 let usuariosRoutes = require('./routes/usuarios');
 let loginRoutes = require('./routes/login');
+let hospitalRoutes = require('./routes/hospitales');
+let medicoRoutes = require('./routes/medicos');
 
 
 //Conexion con mongodb
@@ -34,6 +36,8 @@ mongoose.connection.openUri('mongodb://localhost:27017/HospitalDB', (err,res)=>{
 //rutas
 app.use('/login',loginRoutes);
 app.use('/usuarios',usuariosRoutes);
+app.use('/hospitales',hospitalRoutes);
+app.use('/medicos',medicoRoutes);
 app.use('/',appRoutes);
 
 //escuchar puerto
