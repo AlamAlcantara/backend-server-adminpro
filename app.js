@@ -18,6 +18,8 @@ let usuariosRoutes = require('./routes/usuarios');
 let loginRoutes = require('./routes/login');
 let hospitalRoutes = require('./routes/hospitales');
 let medicoRoutes = require('./routes/medicos');
+let busquedaRoutes = require('./routes/busqueda');
+
 
 
 //Conexion con mongodb
@@ -38,6 +40,7 @@ app.use('/login',loginRoutes);
 app.use('/usuarios',usuariosRoutes);
 app.use('/hospitales',hospitalRoutes);
 app.use('/medicos',medicoRoutes);
+app.use('/busqueda',busquedaRoutes);
 app.use('/',appRoutes);
 
 //escuchar puerto

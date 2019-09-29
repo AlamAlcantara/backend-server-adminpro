@@ -10,10 +10,16 @@ let app = express();
 
 //===========================================
 // Obtener todos los hospitales
-//===========================================
+//=========================================== 
 app.get('/',(req,res,next)=>{
 
+    let desde = req.query.desde || 0;
+    desde = Number(desde);
+
     Hospital.find({})
+    .skip(desde)
+    .limit(5)
+    .populate('usuario','nombre email')
     .exec((err,hospitales)=>{
         if(err){
             return res.status(500).json({
@@ -22,11 +28,14 @@ app.get('/',(req,res,next)=>{
                 error:err
             })
         }else{
-            return res.status(200).json({
-                ok:true,
-                mensaje:'Lista de hospitales',
-                hospitales:hospitales
-            })
+            Hospital.count({},(err,conteo)=>{
+                return res.status(200).json({ 
+                    ok:true,
+                    mensaje:'Lista de hospitales',
+                    hospitales:hospitales,
+                    total:conteo
+                })
+            });
         }
     });
     // res.status(200).json({
@@ -43,7 +52,7 @@ app.post('/',mdAutenticacion.verificarToken ,(req,res,next)=>{
     let _hospital = new Hospital({
         nombre:body.nombre,
         img:body.img,
-        usuario:body.usuario
+        usuario:req.usuario._id
     });
 
     _hospital.save((err,hospitalCreado)=>{
@@ -89,7 +98,7 @@ app.put('/:id',mdAutenticacion.verificarToken,(req,res)=>{
 
         hospital.nombre = body.nombre;
         hospital.img = body.img;
-        hospital.usuario = body.usuario;
+        hospital.usuario =req.usuario._id;
 
         hospital.save((err,hospitalGuardado)=>{
             if(err){

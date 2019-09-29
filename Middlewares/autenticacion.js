@@ -12,7 +12,7 @@ module.exports.verificarToken = function(req,res,next){
 
    jwt.verify(token,SEED,(err,decoded)=>{
        if(err){
-          return res.status(401).json({
+          return res.status(401).json({ 
                ok:false, 
                mensaje:'token incorrecto',
                error:err

@@ -8,4 +8,4 @@ let medicoSchema = new Schema({
     hospital:{type:Schema.Types.ObjectId,ref:'Hospital',required:[true,'El hospital es requerido']}
 },{collection:'medicos'});
 
-module.exports = mongoose.model('Medico',medicoSchema);
+module.exports = mongoose.model('Medico',medicoSchema);  

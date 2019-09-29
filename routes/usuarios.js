@@ -14,7 +14,12 @@ let app = express();
 app.get('/',(req,res,next)=>{
 
 
+    let desde = req.query.desde || 0;
+    desde = Number(desde);
+
     Usuario.find({},'nombre email img role')
+    .skip(desde)
+    .limit(5)
     .exec((err,Usuarios)=>{
         if(err){
             res.status(500).json({
@@ -23,10 +28,13 @@ app.get('/',(req,res,next)=>{
             });
         }else{
             // console.log(Usuarios);
-            res.status(200).json({
-                ok:true,
-                mensaje:'collecion de usuarios',
-                Usuarios: Usuarios
+            Usuario.count({},(err,conteo)=>{
+                res.status(200).json({
+                    ok:true,
+                    mensaje:'collecion de usuarios',
+                    Usuarios: Usuarios,
+                    total:conteo
+                });
             });
         }
     });

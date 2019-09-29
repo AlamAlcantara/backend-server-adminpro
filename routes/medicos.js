@@ -10,10 +10,17 @@ let app = express();
 
 //===========================================
 // Obtener todos los medicos
-//===========================================
+//=========================================== 
 app.get('/',(req,res,next)=>{
 
+    let desde = req.query.desde;
+    desde = Number(desde);
+
     Medico.find({})
+    .skip(desde)
+    .limit(5)
+    .populate('usuario','nombre email')
+    .populate('hospital','nombre')
     .exec((err,medicos)=>{
         if(err){
             return res.status(500).json({
@@ -22,11 +29,15 @@ app.get('/',(req,res,next)=>{
                 error:err
             })
         }else{
-            return res.status(200).json({
-                ok:true,
-                mensaje:'Lista de medicos',
-                medicos:medicos
-            })
+
+            Medico.count({},(err,conteo)=>{
+                return res.status(200).json({
+                    ok:true,
+                    mensaje:'Lista de medicos',
+                    medicos:medicos,
+                    total:conteo
+                })
+            });
         }
     });
     // res.status(200).json({
@@ -118,7 +129,7 @@ app.put('/:id',mdAutenticacion.verificarToken,(req,res)=>{
 
 app.delete('/:id',mdAutenticacion.verificarToken,(req,res)=>{
 
-    let id = req.params.id;
+    let id = req.params.id; 
     Medico.findByIdAndRemove(id,(err,medicoBorrado)=>{
         if(err){
             return res.status(500).json({
