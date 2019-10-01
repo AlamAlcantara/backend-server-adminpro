@@ -7,6 +7,49 @@ let Usuario = require('../models/usuario');
 let app = express();
 
 //rutas
+
+//==============================
+// Busqueda especifica
+//==============================
+
+app.get('/coleccion/:tabla/:busqueda',(req,res)=>{
+
+    let tabla = req.params.tabla;
+    let busqueda = req.params.busqueda;
+    let regexp = new RegExp(busqueda,'i');
+
+    let promesa; 
+
+    switch(tabla){
+        case 'medicos':
+            promesa = cargarMedicos(busqueda,regexp);
+            break;
+        case 'hospitales':
+            promesa = cargarHospitales(busqueda,regexp);
+            break;
+        case 'usuarios':
+            promesa = cargarUsuarios(busqueda,regexp);
+            break;
+        default:
+            return res.status(400).json({
+                 ok: true,
+                 mensaje: 'Error al realizar busqueda tabla/coleccion'
+            })
+    }
+
+    return promesa.then(resultados => {
+        return res.status(200).json({
+            ok:true,
+            mensaje:'Busqueda realizada correctamente',
+            [tabla]:resultados
+        })
+    })
+});
+
+
+//==============================
+// Busqueda general
+//==============================
 app.get('/todo/:busqueda',(req,res,next)=>{
 
     let busqueda = req.params.busqueda;
