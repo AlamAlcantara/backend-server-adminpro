@@ -25,14 +25,11 @@ let uploadRoutes = require('./routes/upload');
 
 //Conexion con mongodb
 mongoose.connection.openUri('mongodb://localhost:27017/HospitalDB', (err,res)=>{
-
     if(err){
         console.log('ERROR EN LA BASE DE DATOS MONGODB');
         throw err;
     }
-
     console.log('MongoDB online');
-
 });
 
 
