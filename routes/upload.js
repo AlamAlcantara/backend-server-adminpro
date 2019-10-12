@@ -2,6 +2,12 @@ let express = require('express');
 const fileUpload = require('express-fileupload');
 
 let app = express();
+let fs = require('fs');
+
+let Usuario = require('../models/usuario');
+let Medico = require('../models/medico');
+let Hospital = require('../models/hospital');
+
 
 //default options
 app.use(fileUpload());
@@ -72,17 +78,116 @@ app.put('/:tipo/:id',(req,res,next)=>{
                 errors:err
             })
         }
-
-        return res.status(200).json({
-            ok:true,
-            mensaje:'Archivo movido',
-            nombreCortado: nombreCortado,
-            extensionArchivo: extensionArchivo,
-            nuevoNombreArchivo : nuevoNombreArchivo
-        })
+        subirPorTipo(tipo,id,nuevoNombreArchivo,res);
+        // return res.status(200).json({
+        //     ok:true,
+        //     mensaje:'Archivo movido',
+        //     nombreCortado: nombreCortado,
+        //     extensionArchivo: extensionArchivo,
+        //     nuevoNombreArchivo : nuevoNombreArchivo
+        // })
 
     });
 
 })
+
+
+function subirPorTipo(tipoColeccion,id,nuevoNombreArchivo,res){
+
+    if(tipoColeccion == 'usuarios'){
+
+        Usuario.findById(id,(err,usuario)=>{
+
+            let pathViejo =`./uploads/usuarios/${usuario.img}`;
+
+            //para eliminar la imagen ya existente si el ususario ya posee una
+            if(fs.existsSync(pathViejo)){
+                fs.unlinkSync(pathViejo); 
+            }
+
+            usuario.img = nuevoNombreArchivo;
+            usuario.save((err,usuarioActualizado)=>{
+
+                if(err){
+                    return res.status(500).json({
+                        ok:true,
+                        mensaje:'Erro al actualizar imagen de usuario',
+                        err: err  
+                    })
+                }
+
+                return res.status(200).json({
+                    ok:true,
+                    mensaje:'Imagen de usuario actualizada',
+                    usuario: usuarioActualizado 
+                })
+            });
+
+        });
+
+    }
+
+    if(tipoColeccion == 'medicos'){
+
+        Medico.findById(id,(err,medico)=>{
+
+            let pathViejo = `./uploads/medicos/${medico.img}`;
+
+            if(fs.existsSync(pathViejo)){
+                fs.unlinkSync(pathViejo);
+            }
+
+            medico.img = nuevoNombreArchivo;
+            medico.save((err,medicoActualizado)=>{
+                if(err){
+                    return res.status(500).json({
+                        ok:true,
+                        mensaje:'Erro al actualizar imagen de medico',
+                        err: err  
+                    })
+                }
+
+                return res.status(200).json({
+                    ok:true,
+                    mensaje:'Imagen de medico actualizada',
+                    medico: medicoActualizado 
+                })
+            });
+        });
+    }
+
+    if(tipoColeccion == 'hospitales'){
+
+        Hospital.findById(id,(err,hospitalEncontrado)=>{
+
+            let pathViejo = `./uploads/hospitales/${hospitalEncontrado.img}`;
+
+            if(fs.existsSync(pathViejo)){
+                fs.unlinkSync(pathViejo);
+            }
+
+            hospitalEncontrado.img = nuevoNombreArchivo;
+            hospitalEncontrado.save((err,hospitalActualizado)=>{
+                if(err){
+                    return res.status(500).json({
+                        ok:true,
+                        mensaje:'Erro al actualizar imagen de hospital',
+                        err: err  
+                    })
+                }
+
+                return res.status(200).json({
+                    ok:true,
+                    mensaje:'Imagen de hospital actualizada',
+                    hospital: hospitalActualizado 
+                })
+            });
+
+        });
+
+    }
+
+
+}
 
 module.exports = app;

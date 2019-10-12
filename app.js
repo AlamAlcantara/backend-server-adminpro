@@ -20,7 +20,7 @@ let hospitalRoutes = require('./routes/hospitales');
 let medicoRoutes = require('./routes/medicos');
 let busquedaRoutes = require('./routes/busqueda');
 let uploadRoutes = require('./routes/upload');
-
+let imagenesRoutes = require('./routes/imagenes');
 
 
 //Conexion con mongodb
@@ -40,6 +40,7 @@ app.use('/hospitales',hospitalRoutes);
 app.use('/medicos',medicoRoutes);
 app.use('/busqueda',busquedaRoutes);
 app.use('/upload',uploadRoutes);
+app.use('/imagenes',imagenesRoutes);
 app.use('/',appRoutes);
 
 //escuchar puerto
