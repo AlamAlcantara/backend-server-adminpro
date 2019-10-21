@@ -88,7 +88,7 @@ app.post('/google', async (req, res) => {
             usuarioNuevo.save((err, usuarioGuardado) => {
                 if (err) {
                     return res.status(400).json({
-                        ok: falase,
+                        ok: false,
                         mensaje: 'Error al CrearCredenciales',
                         errors: err
                     });
