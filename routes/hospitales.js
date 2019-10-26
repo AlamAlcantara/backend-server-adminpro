@@ -45,6 +45,37 @@ app.get('/',(req,res,next)=>{
 });
 
 //===========================================
+// Obtener hospiral por nombre
+//=========================================== 
+
+app.get('/:nombreHospital',(req,res,err)=>{
+    let nombreHospital = req.params.nombreHospital;
+
+    Hospital.find({nombre:nombreHospital})
+    .populate('usuario','nombre img email')
+    .exec((err,hospitalEncontrado)=>{
+        if(err){
+           return res.status(500).json({
+                ok:false,
+                mensaje:'Error al buscar hospital por nombre',
+                Error:err
+            })
+        }else if(!hospitalEncontrado){
+           return res.status(400).json({
+                ok:false,
+                mensaje:`Hospital ${nombreHospital} no existe`
+            })
+        }else{
+            return res.status(200).json({
+                ok:true,
+                mensaje:`Hospital ${nombreHospital} encontrado exitosamente`,
+                hospital:hospitalEncontrado
+            })
+        }
+    })
+})
+
+//===========================================
 // Obtener hospital por ID
 //=========================================== 
 
