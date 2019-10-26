@@ -20,7 +20,7 @@ const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 async function verify(token) {
     const ticket = await client.verifyIdToken({
         idToken: token,
-        audience: GOOGLE_CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+        audience: GOOGLE_CLIENT_ID  // Specify the CLIENT_ID of the app that accesses the backend
         // Or, if multiple clients access the backend:
         //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
     });
@@ -41,7 +41,7 @@ app.post('/google', async (req, res) => {
     let token = req.body.token;
     let googleUser = await verify(token)
         .catch(e => {
-            return res.status(400).json({
+            res.status(400).json({
                 ok: false,
                 mensaje: 'Error al auntenticarse con cuenta de google',
                 errors: e
