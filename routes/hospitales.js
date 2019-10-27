@@ -45,7 +45,7 @@ app.get('/',(req,res,next)=>{
 });
 
 //===========================================
-// Obtener hospiral por nombre
+// Obtener hospital por nombre
 //=========================================== 
 
 app.get('/:nombreHospital',(req,res,err)=>{

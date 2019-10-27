@@ -3,7 +3,7 @@ let express = require('express');
 let app = express();
 
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs'); 
 
 //rutas
 app.get('/:tipo/:img',(req,res,next)=>{
