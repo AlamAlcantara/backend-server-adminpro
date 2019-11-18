@@ -51,14 +51,14 @@ app.get('/',(req,res,next)=>{
 //===========================================
 app.post('/',mdAutenticacion.verificarToken ,(req,res,next)=>{
     let body = req.body;
-    let _hospital = new Medico({
+    let _medico = new Medico({
         nombre:body.nombre,
         img:body.img,
         usuario:req.usuario._id,
         hospital: body.hospital
     });
 
-    _hospital.save((err,hospitalCreado)=>{
+    _medico.save((err,medicoCreado)=>{
         if(err){
             return res.status(400).json({
                 ok:false,
@@ -69,7 +69,7 @@ app.post('/',mdAutenticacion.verificarToken ,(req,res,next)=>{
             return res.status(201).json({
                 ok:true,
                 mensaje:'Medico creado!',
-                hospitalCreado:hospitalCreado,
+                medicoCreado:medicoCreado,
                 usuarioToken: req.usuario
             });
         }
