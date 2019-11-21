@@ -79,7 +79,7 @@ app.get('/:nombreHospital',(req,res,err)=>{
 // Obtener hospital por ID
 //=========================================== 
 
-app.get('/:id',(req,resp,err)=>{
+app.get('/hospital/:id',(req,resp,err)=>{
     // let token = req.params.token;
     let hospital_id = req.params.id;
 
