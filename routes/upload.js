@@ -98,7 +98,7 @@ function subirPorTipo(tipoColeccion,id,nuevoNombreArchivo,res){
 
         Usuario.findById(id,(err,usuario)=>{
 
-            let pathViejo =`./uploads/usuarios/${usuario.img}`;
+            let pathViejo =`../uploads/usuarios/${usuario.img}`;
 
             //para eliminar la imagen ya existente si el ususario ya posee una
             if(fs.existsSync(pathViejo)){
@@ -129,16 +129,15 @@ function subirPorTipo(tipoColeccion,id,nuevoNombreArchivo,res){
 
     if(tipoColeccion == 'medicos'){
 
-        Medico.findById(id,(err,medico)=>{
-
-            let pathViejo = `./uploads/medicos/${medico.img}`;
+        Medico.findById(id,(err,medicoEncontrado)=>{
+            let pathViejo = `../uploads/medicos/${medicoEncontrado.img}`;
 
             if(fs.existsSync(pathViejo)){
                 fs.unlinkSync(pathViejo);
             }
 
-            medico.img = nuevoNombreArchivo;
-            medico.save((err,medicoActualizado)=>{
+            medicoEncontrado.img = nuevoNombreArchivo;
+            medicoEncontrado.save((err,medicoActualizado)=>{
                 if(err){
                     return res.status(500).json({
                         ok:true,
@@ -160,7 +159,7 @@ function subirPorTipo(tipoColeccion,id,nuevoNombreArchivo,res){
 
         Hospital.findById(id,(err,hospitalEncontrado)=>{
 
-            let pathViejo = `./uploads/hospitales/${hospitalEncontrado.img}`;
+            let pathViejo = `../uploads/hospitales/${hospitalEncontrado.img}`;
 
             if(fs.existsSync(pathViejo)){
                 fs.unlinkSync(pathViejo);
