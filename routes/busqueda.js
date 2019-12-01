@@ -106,7 +106,7 @@ function cargarMedicos(busqueda, regex){
 function cargarUsuarios(busqueda, regex){
 
     return new Promise((resolve,reject)=>{
-        Usuario.find({},'nombre email role')
+        Usuario.find({},'img nombre email role')
                 .or([{'nombre':regex,'email':regex}])
                 .exec((err,usuarios)=>{
                     if(err){

@@ -72,7 +72,8 @@ app.post('/google', async (req, res) => {
                     mensaje: 'Credenciales correctas',
                     usuario: usuarioDB,
                     token: token,
-                    id: usuarioDB._id
+                    id: usuarioDB._id,
+                    menu : obtenerMenu(usuarioDB.role)
                 });
             }
         } else { // el usuario no se encuentra en la base de datos
@@ -101,7 +102,8 @@ app.post('/google', async (req, res) => {
                         mensaje: 'Credenciales creadas',
                         usuario: usuarioGuardado,
                         token: token,
-                        userID: usuarioGuardado._id
+                        userID: usuarioGuardado._id,
+                        menu: obtenerMenu(usuarioGuardado.role)
                     });
                 }
             });
@@ -134,12 +136,12 @@ app.post('/', (req, res) => {
         } else if (!usuarioEncontrado) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'Credenciales incorrectas - email'
+                mensaje: 'Credenciales incorrectas'
             });
         } else if (!bcrypt.compareSync(body.password, usuarioEncontrado.password)) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'Credenciales incorrectas - contraseña'
+                mensaje: 'Credenciales incorrectas'
             });
         } else {
 
@@ -151,10 +153,43 @@ app.post('/', (req, res) => {
                 ok: true,
                 mensaje: 'Credenciales correctas',
                 usuario: usuarioEncontrado,
-                token: token
+                token: token,
+                menu: obtenerMenu(usuarioEncontrado.role)
             });
         }
     });
 });
+
+function obtenerMenu(role){
+    let menu = [
+        {
+          titulo:'Principal',
+          icono:'mdi mdi-gauge',
+          submenu: [
+            {titulo: 'Dashboard', url:'/dashboard'},
+            {titulo: 'Progress', url:'/progress'},
+            {titulo: 'Graficas', url:'/graficas1'},
+            {titulo: 'Promesas', url:'/promesas'},
+            {titulo: 'Rxjs', url:'/rxjs'}
+    
+          ]
+        },
+        {
+          titulo:'Mantenimientos',
+          icono:'mdi mdi-folder-lock-open',
+          submenu:[
+            // {titulo:'Usuarios',url:'/usuarios'},
+            {titulo:'Hospitales',url:'/hospitales'},
+            {titulo:'Medicos',url:'/medicos'}
+          ]
+        }
+      ];
+      
+    if(role === 'ADMIN_ROLE'){
+        menu[1].submenu.unshift({titulo:'Usuarios',url:'/usuarios'});
+    }
+
+    return menu;
+}
 
 module.exports = app;
